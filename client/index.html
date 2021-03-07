@@ -1,0 +1,54 @@
+<html>
+    <head></head>
+    <body>
+        <h3>client</h3>
+        <textarea style="width: 400px; height: 500px;" id="talk"></textarea>
+        <form onsubmit="return run(event);">
+            <input type="text" id="sendi"/>
+            <button type="submit">보내기</button>
+        </form>
+        
+        <script>
+            const socket = new WebSocket("insert valid websocket url");
+
+            const init = () => {
+                socket.send(JSON.stringify({
+                    action: 'init',
+                    data: {
+                        userid: "28sj9jak",
+                        roomid: "s87ajkxa",
+                        isadmin: false
+                    }
+                }));
+            }
+            socket.onopen = (msg) => {
+                console.log("open", msg);
+                init();
+                setInterval(init, 1000 * 60 * 5); // revert in 5 minute
+            };
+            socket.onmessage = (msg) => {
+                console.log(msg);
+                const ans = JSON.parse(msg.data);
+                console.log(ans.action);
+                if(ans.action === 'message') {
+                    alert(ans.message);
+                }
+                document.getElementById("talk").value += 'admin: ' + ans.message + '\n';
+            };
+
+            const run = (e) => {
+                e.preventDefault();
+                const sendi = document.getElementById("sendi").value;
+                document.getElementById("talk").value += 'client: ' + sendi + '\n';
+                console.log(sendi);
+                socket.send(JSON.stringify({
+                    action: 'message',
+                    data: {
+                        roomid: "s87ajkxa",
+                        message: sendi
+                    }
+                }))
+            }
+        </script>
+    </body>
+</html>

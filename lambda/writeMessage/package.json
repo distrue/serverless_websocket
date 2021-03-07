@@ -1,0 +1,10 @@
+{
+  "name": "writeMessage",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.858.0",
+    "mysql": "^2.18.1"
+  }
+}
